@@ -152,6 +152,7 @@ const Navbar = ({
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
+                      <ModeToggle></ModeToggle>
                     <Button asChild variant="outline">
                       <Link href={auth.login.url}>{auth.login.title}</Link>
                     </Button>
