@@ -1,8 +1,13 @@
-export const tutorRoutes=[
+import { Routes } from "@/types";
+
+export const tutorRoutes:Routes[]=[
     {
-      title: "Tutor Overview",
-      url: "/tutor/dashboard",
+      title: "Tutor Management",
       items: [
+        {
+          title: "Overview",
+          url: "/tutor/dashboard",
+        },
         {
           title: "Availability",
           url: "/tutor/availability",

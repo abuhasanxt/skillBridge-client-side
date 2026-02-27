@@ -1,8 +1,13 @@
-export const adminRoutes=[
+import { Routes } from "@/types";
+
+export const adminRoutes:Routes[]=[
     {
-      title: "Amin Overview",
-      url: "/",
+      title: "Amin Management",
       items: [
+        {
+          title: "Overview",
+          url: "/",
+        },
         {
           title: "Users",
           url: "/admin/users",

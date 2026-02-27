@@ -1,8 +1,13 @@
-export const studentRoutes=[
+import { Routes } from "@/types";
+
+export const studentRoutes:Routes[]=[
     {
-      title: "Overview",
-      url: "/",
+      title: "Student Management",
       items: [
+        {
+          title: "Overview",
+          url: "/",
+        },
         {
           title: "Booking",
           url: "/dashboard/bookings",

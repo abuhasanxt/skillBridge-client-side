@@ -17,28 +17,8 @@ import Link from "next/link";
 import { adminRoutes } from "@/routes/adminRoutes";
 import { studentRoutes } from "@/routes/studentRoutes";
 import { tutorRoutes } from "@/routes/tutorRoutes";
+import { Routes } from "@/types";
 
-// This is sample data.
-const data = {
-  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
-  navMain: [
-    {
-      title: "Overview",
-      url: "/",
-      items: [
-        {
-          title: "Booking",
-          url: "/dashboard/bookings",
-        },
-        {
-          title: "Profile",
-          url: "/dashboard/profile",
-        },
-      ],
-    },
-   
-  ],
-};
 
 export function AppSidebar({
   user,
@@ -46,7 +26,7 @@ export function AppSidebar({
   } : {
     user:{role:string} & React.ComponentProps<typeof Sidebar>;
   }) {
-let routes=[]
+let routes :Routes[]=[]
 
     switch (user.role) {
       case "admin":
