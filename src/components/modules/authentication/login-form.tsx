@@ -30,7 +30,8 @@ const handleGoogleLogin=async ()=>{
   })
 }
 
-
+const session=authClient.useSession()
+console.log("🚀 ~ LoginForm ~ session:", session)
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
