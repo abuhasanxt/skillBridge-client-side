@@ -6,7 +6,7 @@ export const studentRoutes:Routes[]=[
       items: [
         {
           title: "Overview",
-          url: "/",
+          url: "/dashboard",
         },
         {
           title: "Booking",
