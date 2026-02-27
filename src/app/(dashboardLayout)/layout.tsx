@@ -13,11 +13,11 @@ export default function DashboardLayout({
   tutor: React.ReactNode;
 }) {
   const user = {
-    role: "admin",
+    role: "tutor",
   };
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar user={user}/>
       <SidebarInset>
         <div className="flex flex-1 flex-col gap-4 p-4">
           {user.role === "admin" ? admin : student}
