@@ -33,13 +33,13 @@ export default function TutorCard({ tutor }: TutorCardProps) {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="flex flex-wrap gap-2">
-          {tutor.subject.map((sub) => (
+         Subject: {tutor.subject.map((sub) => (
             <Badge key={sub} variant="secondary">{sub}</Badge>
           ))}
         </div>
 
         <div className="flex items-center gap-2 text-yellow-500">
-          <Star className="w-4 h-4" /> {tutor.rating} / 5
+          <Star className="w-4 h-4" /> {tutor.rating}
         </div>
 
         <p className="font-semibold">Hourly Price: ${tutor.hourlyPrice}</p>
@@ -49,8 +49,9 @@ export default function TutorCard({ tutor }: TutorCardProps) {
           <ul className="list-disc list-inside space-y-1">
             {tutor.categories.map((cat) => (
               <li key={cat.id}>
-                <span className="font-semibold">{cat.name}</span> - ${cat.price} 
-                <p className="text-sm text-gray-500">{cat.description}</p>
+                <span className="font-semibold"> {cat.name}</span> <br />
+                Price: ${cat.price} 
+                <p className="text-sm text-gray-500">Course: {cat.description}</p>
               </li>
             ))}
           </ul>
