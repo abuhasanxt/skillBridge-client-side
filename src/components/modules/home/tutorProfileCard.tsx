@@ -1,8 +1,16 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Category = {
   id: string;
@@ -17,6 +25,7 @@ type Tutor = {
   subject: string[];
   hourlyPrice: number;
   rating: number;
+  authorId:string
   categories: Category[];
 };
 
@@ -33,8 +42,11 @@ export default function TutorCard({ tutor }: TutorCardProps) {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="flex flex-wrap gap-2">
-         Subject: {tutor.subject.map((sub) => (
-            <Badge key={sub} variant="secondary">{sub}</Badge>
+          Subject:{" "}
+          {tutor.subject.map((sub) => (
+            <Badge key={sub} variant="secondary">
+              {sub}
+            </Badge>
           ))}
         </div>
 
@@ -45,16 +57,9 @@ export default function TutorCard({ tutor }: TutorCardProps) {
         <p className="font-semibold">Hourly Price: ${tutor.hourlyPrice}</p>
 
         <div>
-          <h4 className="font-medium mb-1">Categories:</h4>
-          <ul className="list-disc list-inside space-y-1">
-            {tutor.categories.map((cat) => (
-              <li key={cat.id}>
-                <span className="font-semibold"> {cat.name}</span> <br />
-                Price: ${cat.price} 
-                <p className="text-sm text-gray-500">Course: {cat.description}</p>
-              </li>
-            ))}
-          </ul>
+          <Button className="mt-4 w-full">
+            <Link href={`/tutors/${tutor.authorId}`}>Details</Link>
+          </Button>
         </div>
       </CardContent>
     </Card>

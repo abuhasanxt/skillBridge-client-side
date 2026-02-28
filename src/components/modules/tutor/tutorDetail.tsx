@@ -89,7 +89,7 @@ export default function TutorDetailsCard({ tutor }: Props) {
 
         {/* Categories */}
         <div>
-          <h3 className="font-semibold text-lg mb-2">Courses</h3>
+          <h3 className="font-semibold text-lg mb-2">Categories</h3>
           <div className="space-y-3">
             {profile.categories.map((cat) => (
               <Card key={cat.id} className="p-3 bg-muted">
