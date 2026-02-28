@@ -4,6 +4,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Tutor } from "@/types";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 
 
@@ -50,6 +52,10 @@ export default function TutorCard({ tutor }: TutorCardProps) {
           )}
           {tutor.emailVerified && <Badge variant="outline">Verified</Badge>}
         </div>
+        <Button className="mt-4 w-full">
+            <Link href={`/tutors/${tutor.id}`} >Details</Link>
+  
+</Button>
       </CardContent>
     </Card>
   );
