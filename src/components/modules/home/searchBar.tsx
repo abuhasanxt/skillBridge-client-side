@@ -87,9 +87,6 @@
 //   );
 // }
 
-
-
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -98,18 +95,9 @@ import { Button } from "@/components/ui/button";
 
 import { tutorProfileService } from "@/services/tutorProfile.service";
 import TutorCard from "./tutorProfileCard";
+import { Category, Tutor } from "@/types";
 
-
-export type Category = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  tutorProfileId: string;
-  createdAt: string;
-};
-
-export type TutorProfile = {
+ type TutorProfile = {
   id: string;
   bio: string;
   subject: string[];
@@ -120,20 +108,6 @@ export type TutorProfile = {
   createdAt: string;
   updatedAt: string;
   categories: Category[];
-};
-
-export type Tutor = {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image: string | null;
-  createdAt: string;
-  updatedAt: string;
-  isBanned: boolean;
-  role: string;
-  phone: string | null;
-  tutorProfile?: TutorProfile;
 };
 
 export default function HomeSearch() {
@@ -161,7 +135,9 @@ export default function HomeSearch() {
       const bioMatch = t.bio.toLowerCase().includes(term);
 
       // match subjects
-      const subjectMatch = t.subject.some((s) => s.toLowerCase().includes(term));
+      const subjectMatch = t.subject.some((s) =>
+        s.toLowerCase().includes(term),
+      );
 
       // match rating (if user types a number)
       const numericTerm = Number(term);
