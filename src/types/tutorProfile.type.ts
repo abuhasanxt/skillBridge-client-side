@@ -10,11 +10,11 @@ export interface Category {
 export interface TutorProfile {
   id: string;
   bio: string;
-  subject: string[]; // e.g., ["biology", "phy"]
+  subject: string[]; 
   hourlyPrice: number;
-  rating: number; // e.g., 5
+  rating: number; 
   authorId: string;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
+  createdAt: string;
+  updatedAt: string; 
   categories: Category[];
 }
