@@ -1,5 +1,6 @@
 import Carousel from "@/components/modules/home/Carousel";
 import FAQ from "@/components/modules/home/faq";
+import HomeSearch from "@/components/modules/home/searchBar";
 import TutorCard from "@/components/modules/home/tutorProfileCard";
 
 import { tutorProfileService } from "@/services/tutorProfile.service";
@@ -9,6 +10,9 @@ export default async function Home() {
   const { data } = await tutorProfileService.getTutorProfile();
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 font-sans dark:bg-black p-6 space-y-6">
+      <div>
+        <HomeSearch></HomeSearch>
+      </div>
       {/* Carousel on top */}
       <div className="w-full mx-auto">
         <Carousel />
