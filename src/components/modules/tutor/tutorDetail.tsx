@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 type Category = {
   id: string;
@@ -96,6 +97,10 @@ export default function TutorDetailsCard({ tutor }: Props) {
                 <p className="font-semibold">{cat.name}</p>
                 <p className="text-sm text-muted-foreground">{cat.description}</p>
                 <p className="text-sm font-medium mt-1">Price: ${cat.price}</p>
+                <div className="flex items-center justify-between">
+                  <Button>Booking now</Button>
+                  <Button>Review</Button>
+                </div>
               </Card>
             ))}
           </div>

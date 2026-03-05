@@ -6,7 +6,6 @@ export const dynamic = "force-dynamic";
 
 export default async function CategoryPage() {
   const result = await categoryService.getCategories();
-  console.log("🚀 ~ CategoryPage ~ result:", result);
 
   // API structure: result.data.data = actual array
   const categories: Category[] = result?.data?.data || [];
