@@ -14,7 +14,7 @@ function redirectByRole(role: string, request: NextRequest) {
 export async function proxy(request: NextRequest) {
   const pathName = request.nextUrl.pathname;
   const { data } = await userService.getSession();
-  console.log({data},"data");
+
   const role = data?.user?.role;
   if (!role) {
     return NextResponse.redirect(new URL("/login", request.url));

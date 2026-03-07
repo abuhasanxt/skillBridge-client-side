@@ -1,33 +1,30 @@
-"use client";
+// "use client";
 
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Roles } from "@/constants/roles";
+import { userService } from "@/services/user.service";
 
-type DashboardLayoutProps = {
-  admin: React.ReactNode;
-  student: React.ReactNode;
-  tutor: React.ReactNode;
-  user?: {
-    role: "admin" | "student" | "tutor";
-  };
-};
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   admin,
   student,
   tutor,
-  user,
-}: DashboardLayoutProps) {
-  const currentUser = user ?? { role: "tutor" };
-
+}: {
+  children: React.ReactNode;
+  admin: React.ReactNode;
+  student: React.ReactNode;
+  tutor: React.ReactNode;
+}) {
+  const { data } = await userService.getSession();
+  const userInfo = data?.user;
   return (
     <SidebarProvider>
-      <AppSidebar user={currentUser} />
+      <AppSidebar user={userInfo} />
       <SidebarInset>
         <div className="flex flex-1 flex-col gap-4 p-4">
-          {currentUser.role === "admin"
+          {userInfo?.role === Roles.admin
             ? admin
-            : currentUser.role === "tutor"
+            : userInfo?.role === Roles.tutor
               ? tutor
               : student}
         </div>

@@ -13,6 +13,10 @@ export const tutorRoutes:Routes[]=[
           url: "/tutor/availability",
         },
         {
+          title: "Create Profile",
+          url: "/tutor/create-profile",
+        },
+        {
           title: "Profile",
           url: "/tutor/profile",
         },

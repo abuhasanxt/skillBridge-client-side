@@ -14,3 +14,15 @@ export const tutorProfileService = {
     }
   },
 };
+export const tutorProfileCreateService = {
+  createTutorProfile: async function () {
+    try {
+      const res = await fetch(`${API_URL}/api/tutor/profile`);
+      const data = await res.json();
+
+      return { data: data, error: null };
+    } catch (error) {
+      return { data: null, error: { message: "Something Went Wrong" } };
+    }
+  },
+};
