@@ -20,6 +20,10 @@ export const tutorRoutes:Routes[]=[
           title: "Profile",
           url: "/tutor/profile",
         },
+        {
+          title: "Home",
+          url: "/",
+        },
       ],
     },
    

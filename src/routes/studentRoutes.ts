@@ -16,6 +16,10 @@ export const studentRoutes:Routes[]=[
           title: "Profile",
           url: "/dashboard/profile",
         },
+        {
+          title: "Home",
+          url: "/",
+        },
       ],
     },
    

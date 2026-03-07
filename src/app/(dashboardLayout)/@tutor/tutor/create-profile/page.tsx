@@ -1,9 +1,11 @@
-"use client";
+
+
+import CreateProfileFormServer from "@/components/modules/tutor/createProfile/createProfileFormServer";
 
 export default function CreateProfilePage() {
   return (
     <div>
-      This is create profile Component
+      <CreateProfileFormServer/>
     </div>
   );
 }
