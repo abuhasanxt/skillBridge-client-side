@@ -14,13 +14,11 @@ function redirectByRole(role: string, request: NextRequest) {
 export async function proxy(request: NextRequest) {
   const pathName = request.nextUrl.pathname;
   const { data } = await userService.getSession();
-
-  if (!data) {
-    // Not logged in → login
+  console.log({data},"data");
+  const role = data?.user?.role;
+  if (!role) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-
-  const role = data.user.role;
 
   // 🎯 Entry /dashboard redirect
   if (pathName === "/dashboard") {
@@ -28,7 +26,7 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin", request.url));
     if (role === Roles.tutor)
       return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
-    return NextResponse.next(); 
+    return NextResponse.next();
   }
 
   // 🚫 Admin protection
