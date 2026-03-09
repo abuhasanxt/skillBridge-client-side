@@ -22,7 +22,7 @@ export default async function Home() {
         <h2 className="text-4xl text-blue-700 font-bold text-center py-4">
           Find Tutor
         </h2>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ">
           {data?.data?.map((tutorProfile: TutorProfile) => (
             <div key={tutorProfile.id} className="flex-shrink-0 w-80">
               <TutorCard tutor={tutorProfile} />
