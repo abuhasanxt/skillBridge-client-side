@@ -1,7 +1,11 @@
 "use server"
 
-import { tutorProfileCreateService } from "@/services/tutorProfile.service"
+import { ProfileData, tutorProfileCreateService } from "@/services/tutorProfile.service"
+import { updateTag } from "next/cache"
 
-export const createTutorProfile=async()=>{
-    return await tutorProfileCreateService.createTutorProfile()
+
+export const createTutorProfile=async(data:ProfileData)=>{
+    const res=await tutorProfileCreateService.createTutorProfile(data)
+    updateTag("tutorProfile")
+    return  res
 }

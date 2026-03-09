@@ -14,8 +14,8 @@
 //     }
 //   },
 // };
-
 import { env } from "@/env";
+// import { cookies } from "next/headers";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
@@ -23,6 +23,7 @@ interface ServiceOption {
   cache?: RequestCache;
   revalidate?: number;
 }
+
 
 export const tutorProfileService = {
   getTutorProfile: async function (options?: ServiceOption) {
@@ -51,12 +52,28 @@ export const tutorProfileService = {
 };
 
 
+export interface ProfileData{
+  hourlyPrice:number,
+  subject:string[],
+  bio?:string
+}
 export const tutorProfileCreateService = {
-  createTutorProfile: async function () {
+  createTutorProfile: async function (profileData:ProfileData) {
     try {
-      const res = await fetch(`${API_URL}/api/tutor/profile`);
+      // const cookieStore = await cookies();
+      const res = await fetch(`${API_URL}/api/tutor/profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          cookie: cookieStore.toString(),
+        },
+        body: JSON.stringify(profileData),
+      });
       const data = await res.json();
 
+      if (data.error) {
+        return {data:null ,error:{message:data.error || "Error: Profile not created"}}
+      }
       return { data: data, error: null };
     } catch (error) {
       return { data: null, error: { message: "Something Went Wrong" } };
