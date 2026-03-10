@@ -21,6 +21,10 @@ export const adminRoutes:Routes[]=[
           url: "/admin/categories",
         },
         {
+          title: "Profile",
+          url: "/admin/profile",
+        },
+        {
           title: "Home",
           url: "/",
         },
