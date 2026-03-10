@@ -1,21 +1,5 @@
-// import { env } from "@/env";
 
-// const API_URL = env.NEXT_PUBLIC_API_URL;
-
-// export const tutorProfileService = {
-//   getTutorProfile: async function () {
-//     try {
-//       const res = await fetch(`${API_URL}/tutor/profile`);
-//       const data = await res.json();
-
-//       return { data: data, error: null };
-//     } catch (error) {
-//       return { data: null, error: { message: "Something Went Wrong" } };
-//     }
-//   },
-// };
 import { env } from "@/env";
-// import { cookies } from "next/headers";
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
@@ -57,25 +41,26 @@ export interface ProfileData{
   subject:string[],
   bio?:string
 }
+
 export const tutorProfileCreateService = {
-  createTutorProfile: async function (profileData:ProfileData) {
+  createTutorProfile: async function (profileData: ProfileData, token?: string) {
     try {
-      // const cookieStore = await cookies();
+
       const res = await fetch(`${API_URL}/api/tutor/profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          cookie: cookieStore.toString(),
+          cookie: `better-auth.session_token=${token}`,
         },
         body: JSON.stringify(profileData),
       });
+
       const data = await res.json();
 
-      if (data.error) {
-        return {data:null ,error:{message:data.error || "Error: Profile not created"}}
-      }
-      return { data: data, error: null };
+      return { data, error: null };
+
     } catch (error) {
+      console.log(error);
       return { data: null, error: { message: "Something Went Wrong" } };
     }
   },

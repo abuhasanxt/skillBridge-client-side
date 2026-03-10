@@ -19,31 +19,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "@tanstack/react-form";
+
 import { toast } from "sonner";
 import { z } from "zod";
 
 const tutorProfileSchema = z.object({
-  hourlyPrice: z.number().min(1, "Price is required"),
+  hourlyPrice: z.coerce.number().min(1, "Price is required"),
   subject: z.string().min(1, "Subject is required"),
   bio: z
     .string()
     .min(10, "Bio must be at least 10 characters")
-    .max(5000, "Bio must be less than 5000 characters")
-    .optional(),
+    .max(5000, "Bio must be less than 5000 characters"),
 });
 
 export function CreateTutorProfileFormClient() {
   const form = useForm({
     defaultValues: {
-      hourlyPrice: "",
+      hourlyPrice: 0,
       subject: "",
       bio: "",
     },
+
+    validators: {
+      onSubmit: tutorProfileSchema,
+    },
+
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("Creating....");
 
       const profileData = {
-        hourlyPrice: Number(value.hourlyPrice),
+        hourlyPrice: value.hourlyPrice,
         subject: value.subject
           .split(",")
           .map((item) => item.trim())
@@ -54,8 +59,8 @@ export function CreateTutorProfileFormClient() {
       try {
         const res = await createTutorProfile(profileData);
 
-        if (res.error) {
-          toast.error(res.error.message, { id: toastId });
+        if (res.error || !res.data?.success) {
+          toast.error(res.data?.details || res.error?.message, { id: toastId });
           return;
         }
 
@@ -82,11 +87,9 @@ export function CreateTutorProfileFormClient() {
           }}
         >
           <FieldGroup>
-
             {/* Hourly Price */}
-            <form.Field
-              name="hourlyPrice"
-              children={(field) => {
+            <form.Field name="hourlyPrice">
+              {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
 
@@ -99,9 +102,9 @@ export function CreateTutorProfileFormClient() {
                       id={field.name}
                       value={field.state.value}
                       onChange={(e) =>
-                        field.handleChange(e.target.value)
+                        field.handleChange(Number(e.target.value))
                       }
-                      placeholder="50"
+                      placeholder="Hourly price"
                     />
 
                     {isInvalid && (
@@ -110,12 +113,11 @@ export function CreateTutorProfileFormClient() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Subject */}
-            <form.Field
-              name="subject"
-              children={(field) => {
+            <form.Field name="subject">
+              {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
 
@@ -129,9 +131,7 @@ export function CreateTutorProfileFormClient() {
                       type="text"
                       id={field.name}
                       value={field.state.value}
-                      onChange={(e) =>
-                        field.handleChange(e.target.value)
-                      }
+                      onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="bangla, english, math"
                     />
 
@@ -141,12 +141,11 @@ export function CreateTutorProfileFormClient() {
                   </Field>
                 );
               }}
-            />
+            </form.Field>
 
             {/* Bio */}
-            <form.Field
-              name="bio"
-              children={(field) => {
+            <form.Field name="bio">
+              {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;
 
@@ -157,9 +156,7 @@ export function CreateTutorProfileFormClient() {
                     <Textarea
                       id={field.name}
                       value={field.state.value}
-                      onChange={(e) =>
-                        field.handleChange(e.target.value)
-                      }
+                      onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="Write about yourself"
                     />
 
@@ -169,8 +166,7 @@ export function CreateTutorProfileFormClient() {
                   </Field>
                 );
               }}
-            />
-
+            </form.Field>
           </FieldGroup>
         </form>
       </CardContent>
