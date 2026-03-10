@@ -1,4 +1,4 @@
-// app/(dashboard)/profile/page.tsx
+
 import GetOwnProfile from "@/components/modules/ownProfile/getOwnProfile";
 import { ownProfile } from "@/services/ownProfile.service";
 export const dynamic = "force-dynamic";
