@@ -11,6 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TutorProfile } from "@/types";
+import Link from "next/link";
 
 type User = {
   name: string;
@@ -44,7 +45,6 @@ export default function GetOwnProfile({ user }: TutorProfileCardProps) {
           </div>
         )}
       </div>
-
       {/* Header */}
       <CardHeader className="text-center mt-4">
         <CardTitle className="text-xl font-semibold">Name: {name}</CardTitle>
@@ -52,7 +52,6 @@ export default function GetOwnProfile({ user }: TutorProfileCardProps) {
           Role:{role}
         </CardDescription>
       </CardHeader>
-
       {/* Content */}
       <CardContent className="space-y-4 px-6 mt-2">
         <div className="text-center">
@@ -109,15 +108,16 @@ export default function GetOwnProfile({ user }: TutorProfileCardProps) {
           )}
         </div>
       </CardContent>
-
       {/* Footer */}
       <CardFooter className="flex justify-center pb-6">
-        <Button
-          variant="default"
-          className="hover:bg-indigo-600 hover:text-white transition-colors"
-        >
-          Edit Profile
-        </Button>
+        <Link href="/tutor/profile/edit">
+          <Button
+            variant="default"
+            className="hover:bg-indigo-600 hover:text-white transition-colors"
+          >
+            Edit Profile
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
