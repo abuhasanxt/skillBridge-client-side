@@ -25,9 +25,16 @@ type User = {
 interface TutorProfileCardProps {
   user: User;
 }
-
+const editProfileRoutes: Record<string, string> = {
+  STUDENT: "/dashboard/profile/edit",
+  TUTOR: "/tutor/profile/edit",
+  ADMIN: "/admin/profile/edit",
+};
 export default function GetOwnProfile({ user }: TutorProfileCardProps) {
   const { name, email, phone, role, image, tutorProfile } = user;
+  const editPath =
+    editProfileRoutes[role as keyof typeof editProfileRoutes] ||
+    "/dashboard/profile/edit";
 
   return (
     <Card className="max-w-md mx-auto my-8 shadow-lg border border-gray-200 rounded-xl overflow-hidden">
@@ -110,7 +117,7 @@ export default function GetOwnProfile({ user }: TutorProfileCardProps) {
       </CardContent>
       {/* Footer */}
       <CardFooter className="flex justify-center pb-6">
-        <Link href="/tutor/profile/edit">
+        <Link href={editPath}>
           <Button
             variant="default"
             className="hover:bg-indigo-600 hover:text-white transition-colors"

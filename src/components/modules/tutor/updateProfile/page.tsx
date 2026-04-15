@@ -6,13 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Profile } from "@/services/updateProfile.service";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
-
+import { Roles } from "@/constants/roles";
 
 export default function UpdateProfile() {
   const [hasProfile, setHasProfile] = useState(false);
-
-const router=useRouter()
+  const [role, setRole] = useState<string>("");
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     image: "",
@@ -25,7 +24,12 @@ const router=useRouter()
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await Profile.getProfile();
-      if (data) {
+
+      const user = data?.user;
+
+      if (user) {
+        setRole(user.role);
+
         setHasProfile(!!data.user.tutorProfile);
 
         setFormData({
@@ -41,7 +45,6 @@ const router=useRouter()
 
     fetchData();
   }, []);
-
   // handle change
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -83,10 +86,15 @@ const router=useRouter()
 
     //  API call
     const res = await Profile.update(payload);
-
     if (res?.success) {
       toast("Profile Updated Successfully");
- router.push("/tutor/profile")
+      router.push(
+        role === Roles.tutor
+          ? "/tutor/profile"
+          : role === Roles.admin
+            ? "/admin/profile"
+            : "/dashboard/profile",
+      );
     } else {
       toast("Update Failed");
     }
