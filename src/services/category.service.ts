@@ -14,3 +14,33 @@ export const categoryService = {
     }
   },
 };
+
+export const createCategory = async (payload: any) => {
+  try {
+    const res = await fetch(`${API_URL}/category`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    });
+
+    const result = await res.json();
+
+    return {
+      success: result?.success,
+      message: result?.message,
+      data: result?.data,
+      error: result?.error || null,
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Something Went Wrong",
+      data: null,
+      error: error?.message
+    };
+  }
+};
