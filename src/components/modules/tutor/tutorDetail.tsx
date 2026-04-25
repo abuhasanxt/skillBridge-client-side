@@ -1,9 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Category = {
   id: string;
@@ -21,6 +28,7 @@ type TutorProfile = {
 };
 
 type Tutor = {
+  id: string;
   name: string;
   email: string;
   image: string | null;
@@ -37,10 +45,8 @@ export default function TutorDetailsCard({ tutor }: Props) {
 
   return (
     <Card className="max-w-3xl mx-auto shadow-xl rounded-2xl">
-      
       {/* Header */}
       <CardHeader className="flex flex-col items-center text-center space-y-3">
-
         {tutor.image ? (
           <Image
             src={tutor.image}
@@ -65,7 +71,6 @@ export default function TutorDetailsCard({ tutor }: Props) {
 
       {/* Content */}
       <CardContent className="space-y-6">
-
         {/* Bio */}
         <div>
           <h3 className="font-semibold text-lg mb-1">Bio</h3>
@@ -95,17 +100,21 @@ export default function TutorDetailsCard({ tutor }: Props) {
             {profile.categories.map((cat) => (
               <Card key={cat.id} className="p-3 bg-muted">
                 <p className="font-semibold">{cat.name}</p>
-                <p className="text-sm text-muted-foreground">{cat.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {cat.description}
+                </p>
                 <p className="text-sm font-medium mt-1">Price: ${cat.price}</p>
                 <div className="flex items-center justify-between">
-                  <Button>Booking now</Button>
+                  <Link href={`/booking/${tutor.id}?categoryId=${cat.id}`}>
+                    <Button> Booking now</Button>
+                  </Link>
+
                   <Button>Review</Button>
                 </div>
               </Card>
             ))}
           </div>
         </div>
-
       </CardContent>
     </Card>
   );
