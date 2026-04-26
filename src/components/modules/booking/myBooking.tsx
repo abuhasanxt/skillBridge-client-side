@@ -20,6 +20,10 @@ interface Booking {
   status: string;
   tutor: {
     subject: string[];
+    user: {
+      name: string;
+      email: string;
+    };
   };
 }
 
@@ -68,6 +72,20 @@ export default function MyBookings({
             className="group hover:shadow-md transition-all duration-300 border-l-4 border-l-primary"
           >
             <CardHeader className="pb-3">
+              <div className="flex flex-col items-center mb-3">
+                <div className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center text-lg font-bold shadow">
+                  {booking.tutor?.user?.name?.charAt(0).toUpperCase() || "T"}
+                </div>
+
+                <h3 className="mt-2 font-semibold text-gray-50">
+                  {booking.tutor?.user?.name || "Unknown Tutor"}
+                </h3>
+
+                <p className="text-xs text-muted-foreground">
+                  {booking.tutor?.user?.email || "No email"}
+                </p>
+              </div>
+
               <div className="flex justify-between items-start mb-2">
                 <Badge
                   className={
