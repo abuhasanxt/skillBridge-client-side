@@ -1,9 +1,9 @@
-"use client";
+import GetAllBookings from "@/components/modules/booking/allBookings";
 
 export default function Page() {
   return (
     <div>
-      This is all booking Component
+      <GetAllBookings></GetAllBookings>
     </div>
   );
 }

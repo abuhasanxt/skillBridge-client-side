@@ -67,11 +67,10 @@ export const bookings = {
 export const getBooking = {
   tutor: async function () {
     try {
-      const res = await fetch(`${API_URL}/api/tutor-bookings`,{
-        credentials:"include"
+      const res = await fetch(`${API_URL}/api/tutor-bookings`, {
+        credentials: "include",
       });
       const data = await res.json();
-      
 
       return { data: data.data, error: null };
     } catch (error) {
@@ -79,22 +78,18 @@ export const getBooking = {
     }
   },
 };
-
 
 export const booking = {
   status: async function (bookingId: string, status: string) {
     try {
-      const res = await fetch(
-        `${API_URL}/api/bookings/${bookingId}`,
-        {
-          method: "PUT", 
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ status }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/bookings/${bookingId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      });
 
       const data = await res.json();
 
@@ -105,3 +100,38 @@ export const booking = {
   },
 };
 
+export const allBooking = {
+  status: async function (bookingId: string, status: string) {
+    try {
+      const res = await fetch(`${API_URL}/api/booking/${bookingId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      });
+
+      const data = await res.json();
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      return { data: null, error: { message: "Something Went Wrong" } };
+    }
+  },
+};
+
+export const getAllBooking = {
+  admin: async function () {
+    try {
+      const res = await fetch(`${API_URL}/api/allBookings`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      return { data: null, error: { message: "Something Went Wrong" } };
+    }
+  },
+};
