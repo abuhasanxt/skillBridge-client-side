@@ -109,7 +109,9 @@ export default function TutorDetailsCard({ tutor }: Props) {
                     <Button> Booking now</Button>
                   </Link>
 
-                  <Button>Review</Button>
+                  <Link href={`/review/${tutor.id}?categoryId=${cat.id}`}>
+                    <Button>Review</Button>
+                  </Link>
                 </div>
               </Card>
             ))}
