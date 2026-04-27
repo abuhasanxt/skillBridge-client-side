@@ -49,7 +49,6 @@ interface Props {
 
 export default function TutorDetailsCard({ tutor }: Props) {
   const profile = tutor.tutorProfile;
-  console.log("🚀 ~ TutorDetailsCard ~ profile:", profile);
 
   return (
     <Card className="max-w-3xl mx-auto shadow-xl rounded-2xl">

@@ -1,9 +1,10 @@
-"use client";
+import CreateAvailability from "@/components/modules/tutor/availability/createAvailabilityForm";
+
 
 export default function Page() {
   return (
     <div>
-      This is availability Component
+    <CreateAvailability/>
     </div>
   );
 }
