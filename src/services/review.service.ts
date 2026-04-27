@@ -30,3 +30,22 @@ export const createReview = async (tutorId: string, payload: any) => {
     };
   }
 };
+
+export const get = {
+  review: async function (categoryId: string) {
+    try {
+      const res = await fetch(
+        `${API_URL}/api/reviews?categoryId=${categoryId}`,
+        {
+          credentials: "include",
+          cache: "no-store",
+        },
+      );
+      const data = await res.json();
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      return { data: null, error: { message: "Something Went Wrong" } };
+    }
+  },
+};
