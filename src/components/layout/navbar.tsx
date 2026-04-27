@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { Loader2, Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,9 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./modeToggle";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 interface MenuItem {
   title: string;
@@ -81,6 +84,77 @@ const Navbar = ({
   },
   className,
 }: Navbar1Props) => {
+  const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const syncUser = async () => {
+      setIsLoading(true);
+      try {
+        const stored = localStorage.getItem("user");
+        if (stored) {
+          setUser(JSON.parse(stored));
+        } else {
+          const session = await authClient.getSession();
+          if (session?.data?.user) {
+            setUser(session.data.user);
+            localStorage.setItem("user", JSON.stringify(session.data.user));
+          } else {
+            setUser(null);
+          }
+        }
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    syncUser();
+    window.addEventListener("userChanged", syncUser);
+    return () => window.removeEventListener("userChanged", syncUser);
+  }, []);
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+
+    localStorage.removeItem("user");
+    setUser(null);
+    window.dispatchEvent(new Event("userChanged"));
+
+    router.replace("/login");
+  };
+
+  const renderAuthSection = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center min-w-[100px]">
+          <Loader2 className="animate-spin size-5 text-muted-foreground" />
+        </div>
+      );
+    }
+
+    if (user) {
+      return (
+        <Button onClick={handleLogout} variant="outline">
+          Logout
+        </Button>
+      );
+    }
+
+    return (
+      <div className="flex gap-2">
+        <Button asChild variant="outline">
+          <Link href={auth.login.url}>{auth.login.title}</Link>
+        </Button>
+        <Button asChild>
+          <Link href={auth.signup.url}>{auth.signup.title}</Link>
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <section className={cn("py-4", className)}>
       <div className="container mx-auto px-4">
@@ -108,12 +182,9 @@ const Navbar = ({
           </div>
           <div className="flex gap-2">
             <ModeToggle></ModeToggle>
-            <Button asChild variant="outline" size="sm">
-              <Link href={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+            {/* button */}
+
+            {renderAuthSection()}
           </div>
         </nav>
 
@@ -156,13 +227,9 @@ const Navbar = ({
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
-                      <ModeToggle></ModeToggle>
-                    <Button asChild variant="outline">
-                      <Link href={auth.login.url}>{auth.login.title}</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link href={auth.signup.url}>{auth.signup.title}</Link>
-                    </Button>
+                    <ModeToggle></ModeToggle>
+                    {/* button */}
+                    {renderAuthSection()}
                   </div>
                 </div>
               </SheetContent>
