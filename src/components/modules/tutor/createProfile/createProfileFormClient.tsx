@@ -72,7 +72,7 @@ export function CreateTutorProfileFormClient() {
   });
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Create Tutor Profile</CardTitle>
         <CardDescription>Fill your tutor profile information</CardDescription>

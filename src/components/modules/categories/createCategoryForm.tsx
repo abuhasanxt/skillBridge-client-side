@@ -64,7 +64,7 @@ export function CreateCategoryForm() {
     },
   });
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Create Category</CardTitle>
         <CardDescription>Fill your category information</CardDescription>

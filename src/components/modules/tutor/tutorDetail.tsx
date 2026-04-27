@@ -19,12 +19,19 @@ type Category = {
   description: string;
 };
 
+type Availability = {
+  id: string;
+  day: string;
+  startTime: string;
+  endTime: string;
+};
 type TutorProfile = {
   bio: string;
   subject: string[];
   hourlyPrice: number;
   rating: number;
   categories: Category[];
+  availability: Availability[];
 };
 
 type Tutor = {
@@ -42,6 +49,7 @@ interface Props {
 
 export default function TutorDetailsCard({ tutor }: Props) {
   const profile = tutor.tutorProfile;
+  console.log("🚀 ~ TutorDetailsCard ~ profile:", profile);
 
   return (
     <Card className="max-w-3xl mx-auto shadow-xl rounded-2xl">
@@ -93,6 +101,45 @@ export default function TutorDetailsCard({ tutor }: Props) {
           <p>⭐ Rating: {profile.rating}</p>
         </div>
 
+        {/* Availability */}
+        <div>
+          <h3 className="font-semibold text-lg mb-2">Availability</h3>
+
+          {profile.availability?.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              No availability set yet
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {profile.availability.map((slot) => (
+                <Card key={slot.id} className="p-3 bg-muted">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold">{slot.day}</p>
+                      <p className="text-sm text-muted-foreground">
+                        <span className="font-medium text-green-500">
+                          StartDate:
+                        </span>{" "}
+                        {new Date(slot.startTime).toLocaleDateString()}
+                        <br />
+                        <span className="font-medium text-green-500">
+                          EndDate:
+                        </span>{" "}
+                        {new Date(slot.endTime).toLocaleDateString()}
+                        <br />
+                        <span className="font-medium text-green-500">
+                          StartTime:
+                        </span>{" "}
+                        {new Date(slot.startTime).toLocaleTimeString()} -{" "}
+                        {new Date(slot.endTime).toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
         {/* Categories */}
         <div>
           <h3 className="font-semibold text-lg mb-2">Categories</h3>
