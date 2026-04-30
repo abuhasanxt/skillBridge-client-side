@@ -1,4 +1,4 @@
-"use client";
+
 
 import { CreateBookingForm } from "@/components/modules/booking/createBookingFrom";
 

@@ -1,4 +1,4 @@
-"use client";
+
 
 import UpdateProfile from "@/components/modules/tutor/updateProfile/page";
 
