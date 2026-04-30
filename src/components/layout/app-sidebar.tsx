@@ -25,8 +25,10 @@ export function AppSidebar({
   user,
    ...props 
   } : {
-    user:{role:string} & React.ComponentProps<typeof Sidebar>;
+    user?:{role:string} & React.ComponentProps<typeof Sidebar>;
   }) {
+    if (!user) return null;
+
 let routes :Routes[]=[]
 
     switch (user.role) {
