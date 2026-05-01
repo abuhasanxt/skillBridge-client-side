@@ -16,6 +16,7 @@ export async function proxy(request: NextRequest) {
   const { data } = await userService.getSession();
 
   const role = data?.user?.role;
+  console.log("🚀 ~ proxy ~ role:", role)
   if (!role) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
