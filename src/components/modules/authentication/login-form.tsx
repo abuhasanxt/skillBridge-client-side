@@ -34,7 +34,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
   const handleGoogleLogin = async () => {
     const data = await authClient.signIn.social({
       provider: "google",
-      callbackURL: "http://localhost:3000",
+      callbackURL: "https://skill-bridge-client-theta.vercel.app",
     });
     console.log(data);
   };
@@ -52,20 +52,19 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
       try {
         //
         const res = await authClient.signIn.email(value);
-        console.log("full ", res);
+        console.log("full response", res);
         console.log("user", res.data?.user);
         if (res.error) {
           toast.error(res.error.message, { id: toastId });
           return;
         }
-        const user = res.data?.user;
-        if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
-          window.dispatchEvent(new Event("userChanged"));
-        }
+      
+        const session = await authClient.getSession();
+console.log("login session after login", session);
         toast.success("Login Successfully!", { id: toastId });
         router.replace("/");
       } catch (error) {
+        console.log(error)
         toast.error("Something went wrong, please try again", { id: toastId });
       }
       console.log("submit click", value);

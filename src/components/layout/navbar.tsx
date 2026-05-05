@@ -91,20 +91,17 @@ const Navbar = ({
   useEffect(() => {
     const syncUser = async () => {
       setIsLoading(true);
+
       try {
-        const stored = localStorage.getItem("user");
-        if (stored) {
-          setUser(JSON.parse(stored));
+        const session = await authClient.getSession();
+        console.log("navbar session after login:", session);
+        if (session?.data?.user) {
+          setUser(session.data.user);
         } else {
-          const session = await authClient.getSession();
-          if (session?.data?.user) {
-            setUser(session.data.user);
-            localStorage.setItem("user", JSON.stringify(session.data.user));
-          } else {
-            setUser(null);
-          }
+          setUser(null);
         }
       } catch (error) {
+        console.log("navbar error", error);
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -112,16 +109,12 @@ const Navbar = ({
     };
 
     syncUser();
-    window.addEventListener("userChanged", syncUser);
-    return () => window.removeEventListener("userChanged", syncUser);
   }, []);
 
   const handleLogout = async () => {
     await authClient.signOut();
 
-    localStorage.removeItem("user");
     setUser(null);
-    window.dispatchEvent(new Event("userChanged"));
 
     router.replace("/login");
   };
@@ -134,7 +127,7 @@ const Navbar = ({
         </div>
       );
     }
-
+    console.log("user ace", user);
     if (user) {
       return (
         <Button onClick={handleLogout} variant="outline">
