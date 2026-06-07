@@ -103,7 +103,7 @@ export const booking = {
 export const allBooking = {
   status: async function (bookingId: string, status: string) {
     try {
-      const res = await fetch(`${API_URL}/api/booking/${bookingId}`, {
+      const res = await fetch(`${API_URL}/api/bookings/${bookingId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -151,13 +151,17 @@ export default function TutorDetailsCard({ tutor }: Props) {
                 </p>
                 <p className="text-sm font-medium mt-1">Price: ${cat.price}</p>
                 <div className="flex items-center justify-between">
-                  <Link href={`/booking/${tutor.id}?categoryId=${cat.id}`}>
-                    <Button> Booking now</Button>
-                  </Link>
+                  <Button asChild>
+                    <Link href={`/booking/${tutor.id}?categoryId=${cat.id}`}>
+                      Booking now
+                    </Link>
+                  </Button>
 
-                  <Link href={`/review/${tutor.id}?categoryId=${cat.id}`}>
-                    <Button>Review</Button>
-                  </Link>
+                  <Button asChild>
+                    <Link href={`/review/${tutor.id}?categoryId=${cat.id}`}>
+                      Review
+                    </Link>
+                  </Button>
                 </div>
               </Card>
             ))}

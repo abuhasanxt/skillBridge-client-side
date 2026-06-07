@@ -16,12 +16,26 @@ import { cookies } from "next/headers";
 
 
 const API_URL = env.NEXT_PUBLIC_API_URL;
+const AUTH_URL = env.NEXT_PUBLIC_AUTH_URL;
 
 export default function CreateProfileFormServer() {
   const createProfile = async (formData: FormData) => {
     "use server";
 
-    const authorId = formData.get("authorId") as string;
+    const cookieStore = await cookies();
+    const cookieHeader = cookieStore.toString();
+
+    const sessionRes = await fetch(`${AUTH_URL}/get-session`, {
+      headers: { cookie: cookieHeader },
+      cache: "no-store",
+    });
+    const session = await sessionRes.json();
+    const authorId = session?.user?.id;
+
+    if (!authorId) {
+      return;
+    }
+
     const hourlyPrice = Number(formData.get("price"));
     const subject = formData.get("subject") as string;
     const bio = formData.get("bio") as string | null;
@@ -34,18 +48,17 @@ export default function CreateProfileFormServer() {
         .filter((item) => item !== ""),
       bio: bio || undefined,
     };
-    const cookieStore = await cookies();
     const res = await fetch(`${API_URL}/api/tutor/profile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        cookie: cookieStore.toString(),
+        cookie: cookieHeader,
       },
       body: JSON.stringify(profileData),
     });
-   if (res.ok) {
-    revalidateTag("tutorProfile","max")
-   }
+    if (res.ok) {
+      revalidateTag("tutorProfile", "default");
+    }
   };
   return (
     <Card className="max-w-4xl mx-auto">
@@ -57,18 +70,8 @@ export default function CreateProfileFormServer() {
         <form id="create-profile-form" action={createProfile}>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="authorId">Author Id</FieldLabel>
-              <Input
-                id="authorId"
-                type="text"
-                name="authorId"
-                placeholder="author id"
-              />
-            </Field>
-
-            <Field>
               <FieldLabel htmlFor="subject">
-                Subject (coma separated)
+                Subject (comma separated)
               </FieldLabel>
               <Input
                 id="subject"

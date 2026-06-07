@@ -27,25 +27,33 @@ export default function GetAllUser() {
   }, []);
 
   const handleRoleChange = async (id: string, role: string) => {
+    const previous = users.find((u) => u.id === id)?.role;
+    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role } : u)));
+
     const { data, error } = await user.changeRole(id, role);
     if (error || !data?.success) {
-      toast("Role update failed");
-      return;
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, role: previous ?? u.role } : u)),
+      );
+      toast.error("Role update failed");
     }
-
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role } : u)));
   };
 
   const handleBanChange = async (id: string, status: string) => {
     const isBanned = status === "true";
+    const previous = users.find((u) => u.id === id)?.isBanned;
+
+    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, isBanned } : u)));
 
     const { data, error } = await user.changeIsBanned(id, isBanned);
     if (error || !data?.success) {
-      toast("Ban update failed");
-      return;
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === id ? { ...u, isBanned: previous ?? u.isBanned } : u,
+        ),
+      );
+      toast.error("Ban update failed");
     }
-
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, isBanned } : u)));
   };
 
   return (

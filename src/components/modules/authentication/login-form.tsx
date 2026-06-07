@@ -29,14 +29,23 @@ const formSchema = z.object({
   password: z.string().min(8, "Minimum length 8"),
 });
 
+const dashboardForRole = (role?: string) => {
+  if (role === "ADMIN") return "/admin";
+  if (role === "TUTOR") return "/tutor/dashboard";
+  return "/dashboard";
+};
+
 export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
   const router = useRouter();
   const handleGoogleLogin = async () => {
-    const data = await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "https://skill-bridge-client-theta.vercel.app",
-    });
-    console.log(data);
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "https://skill-bridge-client-theta.vercel.app",
+      });
+    } catch (error) {
+      toast.error("Google sign-in failed");
+    }
   };
   const form = useForm({
     defaultValues: {
@@ -50,24 +59,19 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("Logging In");
       try {
-        //
         const res = await authClient.signIn.email(value);
-        console.log("full response", res);
-        console.log("user", res.data?.user);
         if (res.error) {
           toast.error(res.error.message, { id: toastId });
           return;
         }
-      
-        const session = await authClient.getSession();
-console.log("login session after login", session);
+
         toast.success("Login Successfully!", { id: toastId });
-        router.replace("/");
+        const userRole = (res.data?.user as { role?: string } | undefined)?.role;
+        router.replace(dashboardForRole(userRole));
+        router.refresh();
       } catch (error) {
-        console.log(error)
         toast.error("Something went wrong, please try again", { id: toastId });
       }
-      console.log("submit click", value);
     },
   });
   return (

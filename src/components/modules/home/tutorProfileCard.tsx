@@ -11,26 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-type Category = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-};
-
-type Tutor = {
-  id: string;
-  bio: string;
-  subject: string[];
-  hourlyPrice: number;
-  rating: number;
-  authorId:string
-  categories: Category[];
-};
+import { TutorProfile } from "@/types";
 
 interface TutorCardProps {
-  tutor: Tutor;
+  tutor: TutorProfile;
 }
 
 export default function TutorCard({ tutor }: TutorCardProps) {
@@ -57,7 +41,7 @@ export default function TutorCard({ tutor }: TutorCardProps) {
         <p className="font-semibold">Hourly Price: ${tutor.hourlyPrice}</p>
 
         <div>
-          <Button className="mt-4 w-full">
+          <Button asChild className="mt-4 w-full">
             <Link href={`/tutors/${tutor.authorId}`}>Details</Link>
           </Button>
         </div>

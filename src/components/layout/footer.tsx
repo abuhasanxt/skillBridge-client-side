@@ -4,8 +4,15 @@ import Link from "next/link";
 
 import { Facebook, Github, Linkedin } from "lucide-react";
 import { Separator } from "../ui/separator";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
+  const [year, setYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   return (
     <footer className="bg-muted/40 border-t mt-20">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -50,7 +57,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} SkillBridge. All rights reserved.</p>
+          <p>© {year ?? "—"} SkillBridge. All rights reserved.</p>
           <p>Built with ❤️ for learners & tutors</p>
         </div>
       </div>

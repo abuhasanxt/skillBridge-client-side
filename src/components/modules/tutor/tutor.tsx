@@ -52,10 +52,9 @@ export default function TutorCard({ tutor }: TutorCardProps) {
           )}
           {tutor.emailVerified && <Badge variant="outline">Verified</Badge>}
         </div>
-        <Button className="mt-4 w-full">
-            <Link href={`/tutors/${tutor.id}`} >Details</Link>
-  
-</Button>
+        <Button asChild className="mt-4 w-full">
+          <Link href={`/tutors/${tutor.id}`}>Details</Link>
+        </Button>
       </CardContent>
     </Card>
   );

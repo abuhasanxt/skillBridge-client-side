@@ -31,11 +31,14 @@ const formSchema = z.object({
 
 export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
   const handleGoogleLogin = async () => {
-    const data = authClient.signIn.social({
-      provider: "google",
-      callbackURL: "https://skill-bridge-client-theta.vercel.app",
-    });
-    console.log(data);
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "https://skill-bridge-client-theta.vercel.app",
+      });
+    } catch (error) {
+      toast.error("Google sign-in failed");
+    }
   };
   const form = useForm({
     defaultValues: {
@@ -59,7 +62,6 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
       } catch (error) {
         toast.error("Something went wrong, please try again", { id: toastId });
       }
-      console.log("submit click", value);
     },
   });
   return (

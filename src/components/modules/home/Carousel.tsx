@@ -32,10 +32,10 @@ export default function Carousel() {
   // Optional: Auto-rotate every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      nextSlide();
+      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 5000);
     return () => clearInterval(timer);
-  }, [current]);
+  }, []);
 
   return (
     <div className="relative w-full h-[500px] overflow-hidden rounded-2xl">

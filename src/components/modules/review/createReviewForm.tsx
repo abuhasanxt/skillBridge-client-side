@@ -6,47 +6,45 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function CreateReviewPage() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
 
-  const tutorId = params.tutorId as string; 
-  const categoryId = searchParams.get("categoryId") as string;  
+  const tutorId = params?.id as string;
+  const categoryId = searchParams.get("categoryId") as string;
 
   const [rating, setRating] = useState<number>(5);
   const [comment, setComment] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const payload = {
-      categoryId,
-      rating,
-      comment,
-    };
+      const payload = {
+        categoryId,
+        rating,
+        comment,
+      };
 
-    //  correct call
-    const res = await createReview(tutorId, payload);
+      const res = await createReview(tutorId, payload);
 
-    
-    if (!res.success) {
-      toast(res.message);
+      if (!res.success) {
+        toast.error(res.message || "Failed to submit review");
+        return;
+      }
+
+      toast.success(res.message || "Review submitted!");
+
+      setComment("");
+      setRating(5);
+    } catch (err: any) {
+      toast.error(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
-
-    toast(res.message || "Review submitted!");
-
-    // reset form
-    setComment("");
-    setRating(5);
-  } catch (err: any) {
-    toast(err.message || "Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="max-w-md mx-auto p-6 mt-10 border rounded-xl shadow">

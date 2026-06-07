@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./modeToggle";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 interface MenuItem {
   title: string;
@@ -57,8 +57,8 @@ interface Navbar1Props {
 
 const Navbar = ({
   logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
+    url: "/",
+    src: "https://i.ibb.co.com/35G546YL/4280ed0c-56b9-4f03-a82a-59f31691b818.png",
     alt: "logo",
     title: "Skill Bridge",
   },
@@ -84,50 +84,25 @@ const Navbar = ({
   },
   className,
 }: Navbar1Props) => {
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    const syncUser = async () => {
-      setIsLoading(true);
-
-      try {
-        const session = await authClient.getSession();
-        console.log("navbar session after login:", session);
-        if (session?.data?.user) {
-          setUser(session.data.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.log("navbar error", error);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    syncUser();
-  }, []);
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user ?? null;
 
   const handleLogout = async () => {
     await authClient.signOut();
-
-    setUser(null);
-
+    toast.success("Logged out");
     router.replace("/login");
+    router.refresh();
   };
 
   const renderAuthSection = () => {
-    if (isLoading) {
+    if (isPending) {
       return (
         <div className="flex items-center justify-center min-w-[100px]">
           <Loader2 className="animate-spin size-5 text-muted-foreground" />
         </div>
       );
     }
-    console.log("user ace", user);
     if (user) {
       return (
         <Button onClick={handleLogout} variant="outline">

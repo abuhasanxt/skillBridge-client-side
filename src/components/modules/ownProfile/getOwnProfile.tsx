@@ -19,7 +19,7 @@ type User = {
   role: string;
   phone: string;
   image?: string;
-  tutorProfile: TutorProfile;
+  tutorProfile?: TutorProfile;
 };
 
 interface TutorProfileCardProps {
@@ -68,7 +68,7 @@ export default function GetOwnProfile({ user }: TutorProfileCardProps) {
 
         <div className="text-center">
           <p className="text-sm text-muted-foreground font-medium">
-            Phone:{phone}
+            Phone: <span className="text-foreground">{phone}</span>
           </p>
         </div>
 
@@ -91,25 +91,21 @@ export default function GetOwnProfile({ user }: TutorProfileCardProps) {
             </div>
           )}
 
-          {tutorProfile?.subject && (
+          {tutorProfile?.subject && tutorProfile.subject.length > 0 && (
             <div>
               <p className="text-sm text-muted-foreground font-medium">
                 Subjects :{" "}
               </p>
               <div className="flex flex-wrap gap-2 mt-1 justify-end">
-                {tutorProfile?.subject?.length ? (
-                  tutorProfile.subject.map((sub) => (
-                    <Badge
-                      key={sub}
-                      variant="outline"
-                      className="text-indigo-700 border-indigo-300"
-                    >
-                      {sub}
-                    </Badge>
-                  ))
-                ) : (
-                  <span className="text-gray-400">No subjects</span>
-                )}
+                {tutorProfile.subject.map((sub) => (
+                  <Badge
+                    key={sub}
+                    variant="outline"
+                    className="text-indigo-700 border-indigo-300"
+                  >
+                    {sub}
+                  </Badge>
+                ))}
               </div>
             </div>
           )}

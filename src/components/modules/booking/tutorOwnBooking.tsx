@@ -2,6 +2,7 @@
 
 import { booking, getBooking } from "@/services/booking.service";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type Booking = {
   id: string;
@@ -37,18 +38,28 @@ export default function GetTutorBookings() {
   }, []);
 
   const handleStatusChange = async (id: string, status: string) => {
+    const previous = bookings.find((b) => b.id === id)?.status;
+    setBookings((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status } : b)),
+    );
+
     try {
       const res = await booking.status(id, status);
-
-      if (res?.data) {
+      if (!res?.data) {
         setBookings((prev) =>
           prev.map((b) =>
-            b.id === id ? { ...b, status: res.data.status } : b,
+            b.id === id ? { ...b, status: previous ?? b.status } : b,
           ),
         );
+        toast.error("Failed to update status");
       }
-    } catch (error) {
-      console.error("Status update failed", error);
+    } catch {
+      setBookings((prev) =>
+        prev.map((b) =>
+          b.id === id ? { ...b, status: previous ?? b.status } : b,
+        ),
+      );
+      toast.error("Failed to update status");
     }
   };
 

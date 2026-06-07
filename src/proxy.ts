@@ -1,57 +1,60 @@
 import { NextRequest, NextResponse } from "next/server";
-import { userService } from "./services/user.service";
+
 import { Roles } from "./constants/roles";
+import { getRoleFromCookies } from "./lib/session";
+
+const AUTH_URL =
+  process.env.NEXT_PUBLIC_AUTH_URL ||
+  "http://localhost:5000/api/auth";
 
 function redirectByRole(role: string, request: NextRequest) {
   if (role === Roles.admin)
     return NextResponse.redirect(new URL("/admin", request.url));
   if (role === Roles.tutor)
     return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
-  // Students stay on /dashboard
   return NextResponse.redirect(new URL("/dashboard", request.url));
 }
 
 export async function proxy(request: NextRequest) {
-  const pathName = request.nextUrl.pathname;
-  const { data } = await userService.getSession();
+  try {
+    const pathName = request.nextUrl.pathname;
+    const cookieHeader =
+      request.headers.get("cookie") ?? request.cookies.toString();
+    const role = await getRoleFromCookies(cookieHeader, AUTH_URL);
 
-  const role = data?.user?.role;
-  console.log("🚀 ~ proxy ~ role:", role)
-  if (!role) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+    if (!role) {
+      return NextResponse.next();
+    }
 
-  // 🎯 Entry /dashboard redirect
-  if (pathName === "/dashboard") {
-    if (role === Roles.admin)
-      return NextResponse.redirect(new URL("/admin", request.url));
-    if (role === Roles.tutor)
-      return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
+    if (pathName === "/dashboard") {
+      if (role === Roles.admin)
+        return NextResponse.redirect(new URL("/admin", request.url));
+      if (role === Roles.tutor)
+        return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
+      return NextResponse.next();
+    }
+
+    if (pathName.startsWith("/admin") && role !== Roles.admin) {
+      return redirectByRole(role, request);
+    }
+
+    if (pathName.startsWith("/tutor") && role !== Roles.tutor) {
+      return redirectByRole(role, request);
+    }
+
+    if (role === Roles.student && pathName !== "/dashboard") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    return NextResponse.next();
+  } catch {
     return NextResponse.next();
   }
-
-  // 🚫 Admin protection
-  if (pathName.startsWith("/admin") && role !== Roles.admin) {
-    return redirectByRole(role, request);
-  }
-
-  // 🚫 Tutor protection
-  if (pathName.startsWith("/tutor") && role !== Roles.tutor) {
-    return redirectByRole(role, request);
-  }
-
-  // 🚫 Student protection: prevent access to anything except /dashboard
-  if (role === Roles.student && pathName !== "/dashboard") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
     "/dashboard",
-    // "/dashboard/:path*",
     "/admin",
     "/admin/:path*",
     "/tutor",

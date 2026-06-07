@@ -33,7 +33,8 @@ const bookingSchema = z.object({
 });
 
 export function CreateBookingForm() {
-  const { tutorId: user_id } = useParams();
+  const params = useParams<{ tutorId: string }>();
+  const tutorId = params?.tutorId;
   const searchParams = useSearchParams();
 
   const queryCategoryId = searchParams.get("categoryId");
@@ -44,7 +45,7 @@ export function CreateBookingForm() {
   useEffect(() => {
     const fetchTutor = async () => {
       const { data, error } = await tutorDetailService.getTutorDetail(
-        user_id as string,
+        tutorId as string,
       );
 
       if (error || !data?.success) {
@@ -72,8 +73,8 @@ export function CreateBookingForm() {
       setCategoryId(selectedCatId);
     };
 
-    if (user_id) fetchTutor();
-  }, [user_id, queryCategoryId]);
+    if (tutorId) fetchTutor();
+  }, [tutorId, queryCategoryId]);
 
   const form = useForm({
     defaultValues: {
@@ -101,7 +102,6 @@ export function CreateBookingForm() {
       }
 
       try {
-        console.log("🚀 ~ CreateBookingForm ~ categoryId:", categoryId);
         if (!tutorProfileId || !categoryId) {
           toast.error("Missing profile or category information", {
             id: toastId,

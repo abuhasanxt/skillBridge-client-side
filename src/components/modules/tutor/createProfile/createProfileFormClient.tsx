@@ -65,6 +65,7 @@ export function CreateTutorProfileFormClient() {
         }
 
         toast.success("Profile Created", { id: toastId });
+        form.reset();
       } catch (err) {
         toast.error("Something Went Wrong", { id: toastId });
       }
