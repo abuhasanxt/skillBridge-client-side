@@ -29,13 +29,15 @@ export default function HomeSearch() {
     const term = searchTerm.toLowerCase();
     const numericTerm = Number(term);
 
+    const isNumeric = term !== "" && !isNaN(numericTerm);
+
     const filtered = tutors.filter((t) => {
       const bioMatch = (t.bio || "").toLowerCase().includes(term);
-      const subjectMatch = t.subject.some((s) =>
+      const subjectMatch = (t.subject ?? []).some((s) =>
         s.toLowerCase().includes(term),
       );
-      const ratingMatch = !isNaN(numericTerm) && t.rating >= numericTerm;
-      const priceMatch = !isNaN(numericTerm) && t.hourlyPrice <= numericTerm;
+      const ratingMatch = isNumeric && t.rating >= numericTerm;
+      const priceMatch = isNumeric && t.hourlyPrice <= numericTerm;
 
       return bioMatch || subjectMatch || ratingMatch || priceMatch;
     });

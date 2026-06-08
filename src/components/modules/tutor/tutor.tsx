@@ -29,7 +29,7 @@ export default function TutorCard({ tutor }: TutorCardProps) {
           </div>
         ) : (
           <div className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center text-white text-xl font-bold">
-            {tutor.name[0].toUpperCase()}
+            {(tutor.name?.[0] ?? "?").toUpperCase()}
           </div>
         )}
         <CardTitle>{tutor.name}</CardTitle>

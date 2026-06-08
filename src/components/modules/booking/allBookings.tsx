@@ -10,11 +10,11 @@ type Booking = {
   status: string;
   startDate: string;
   endDate: string;
-  student: {
-    name: string;
-    email: string;
-    phone: string;
-  };
+  student?: {
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+  } | null;
 };
 
 const STATUS_OPTIONS = ["CONFIRMED", "COMPLETED", "CANCELLED"];
@@ -94,13 +94,13 @@ export default function GetAllBookings() {
               <tr key={b.id} className="border-t hover:bg-gray-600">
                 <td className="p-3 flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                    {b.student.name.charAt(0).toUpperCase()}
+                    {(b.student?.name?.charAt(0) ?? "?").toUpperCase()}
                   </div>
-                  {b.student.name}
+                  {b.student?.name ?? "Unknown"}
                 </td>
 
-                <td className="p-3">{b.student.email}</td>
-                <td className="p-3">{b.student.phone}</td>
+                <td className="p-3">{b.student?.email ?? ""}</td>
+                <td className="p-3">{b.student?.phone ?? ""}</td>
                 <td className="p-3">
                   {new Date(b.startDate).toLocaleString()}
                 </td>
@@ -131,18 +131,18 @@ export default function GetAllBookings() {
           <div key={b.id} className=" shadow-md bg-white rounded-xl p-4 border">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-                {b.student.name.charAt(0).toUpperCase()}
+                {(b.student?.name?.charAt(0) ?? "?").toUpperCase()}
               </div>
 
               <div>
-                <h3 className="font-semibold text-black">{b.student.name}</h3>
-                <p className="text-xs text-gray-500">{b.student.email}</p>
+                <h3 className="font-semibold text-black">{b.student?.name ?? "Unknown"}</h3>
+                <p className="text-xs text-gray-500">{b.student?.email ?? ""}</p>
               </div>
             </div>
 
             <div className="text-sm text-gray-600 space-y-1">
               <p>
-                <b>Phone:</b> {b.student.phone}
+                <b>Phone:</b> {b.student?.phone ?? ""}
               </p>
               <p>
                 <b>Start:</b> {new Date(b.startDate).toLocaleString()}

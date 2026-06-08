@@ -69,9 +69,16 @@ export const getBooking = {
     try {
       const res = await fetch(`${API_URL}/api/tutor-bookings`, {
         credentials: "include",
+        cache: "no-store",
       });
       const data = await res.json();
 
+      if (!res.ok || !data?.success) {
+        return {
+          data: null,
+          error: { message: data?.message || "Failed to fetch bookings" },
+        };
+      }
       return { data: data.data, error: null };
     } catch (error) {
       return { data: null, error: { message: "Something Went Wrong" } };
@@ -93,6 +100,12 @@ export const booking = {
 
       const data = await res.json();
 
+      if (!res.ok || !data?.success) {
+        return {
+          data: null,
+          error: { message: data?.message || "Failed to update status" },
+        };
+      }
       return { data: data.data, error: null };
     } catch (error) {
       return { data: null, error: { message: "Something Went Wrong" } };
@@ -114,6 +127,12 @@ export const allBooking = {
 
       const data = await res.json();
 
+      if (!res.ok || !data?.success) {
+        return {
+          data: null,
+          error: { message: data?.message || "Failed to update status" },
+        };
+      }
       return { data: data.data, error: null };
     } catch (error) {
       return { data: null, error: { message: "Something Went Wrong" } };
@@ -126,9 +145,16 @@ export const getAllBooking = {
     try {
       const res = await fetch(`${API_URL}/api/allBookings`, {
         credentials: "include",
+        cache: "no-store",
       });
       const data = await res.json();
 
+      if (!res.ok || !data?.success) {
+        return {
+          data: null,
+          error: { message: data?.message || "Failed to fetch bookings" },
+        };
+      }
       return { data: data.data, error: null };
     } catch (error) {
       return { data: null, error: { message: "Something Went Wrong" } };

@@ -10,11 +10,11 @@ type Booking = {
   status: string;
   startDate: string;
   endDate: string;
-  student: {
-    name: string;
-    email: string;
-    phone: string;
-  };
+  student?: {
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+  } | null;
 };
 
 const STATUS_OPTIONS = ["CONFIRMED", "COMPLETED", "CANCELLED"];
@@ -87,17 +87,17 @@ export default function GetTutorBookings() {
               {/* Avatar TOP */}
               <div className="flex justify-center mb-4">
                 <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xl shadow">
-                  {bookingItem.student.name.charAt(0).toUpperCase()}
+                  {(bookingItem.student?.name?.charAt(0) ?? "?").toUpperCase()}
                 </div>
               </div>
 
               {/* Name */}
               <h3 className="font-semibold text-lg text-gray-800">
-                {bookingItem.student.name}
+                {bookingItem.student?.name ?? "Unknown"}
               </h3>
 
               <p className="text-sm text-gray-500 mb-2">
-                {bookingItem.student.email}
+                {bookingItem.student?.email ?? ""}
               </p>
 
               <div className="mb-4  ">
@@ -119,7 +119,7 @@ export default function GetTutorBookings() {
               {/* Details */}
               <div className="text-sm text-gray-600 space-y-1 mt-3">
                 <p>
-                  <b>Phone:</b> {bookingItem.student.phone}
+                  <b>Phone:</b> {bookingItem.student?.phone ?? ""}
                 </p>
                 <p>
                   <b>Start:</b>{" "}

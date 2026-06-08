@@ -4,7 +4,7 @@ const API_URL = env.NEXT_PUBLIC_API_URL;
 
 export const createAvailability = async (payload: any) => {
   try {
-    const res = await fetch(`${API_URL}/availability`, {
+    const res = await fetch(`${API_URL}/api/availability`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

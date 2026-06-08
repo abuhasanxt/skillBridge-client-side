@@ -19,8 +19,13 @@ export default function GetAllUser() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const { data } = await user.getAllUser();
-      setUsers(data.data || []);
+      const res = await user.getAllUser();
+      if (res?.error || !res?.data?.data) {
+        toast.error("Failed to load users");
+        setUsers([]);
+        return;
+      }
+      setUsers(res.data.data);
     };
 
     fetchUsers();

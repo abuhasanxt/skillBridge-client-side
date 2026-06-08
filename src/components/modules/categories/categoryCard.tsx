@@ -26,11 +26,13 @@ export default function CategoryCard({ category }: CategoryProps) {
       <CardContent className="space-y-4">
         <p className="text-lg font-bold text-primary">${category.price}</p>
 
-        <Button asChild className="mt-4 w-full">
-          <Link href={`/tutors/${category.tutors.authorId}`}>
-            View Tutor Details
-          </Link>
-        </Button>
+        {category.tutors?.authorId && (
+          <Button asChild className="mt-4 w-full">
+            <Link href={`/tutors/${category.tutors.authorId}`}>
+              View Tutor Details
+            </Link>
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

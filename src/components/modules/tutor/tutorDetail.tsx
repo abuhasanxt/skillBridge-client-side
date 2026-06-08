@@ -40,7 +40,7 @@ type Tutor = {
   email: string;
   image: string | null;
   phone: string | null;
-  tutorProfile: TutorProfile;
+  tutorProfile?: TutorProfile | null;
 };
 
 interface Props {
@@ -64,7 +64,7 @@ export default function TutorDetailsCard({ tutor }: Props) {
           />
         ) : (
           <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-2xl font-bold">
-            {tutor.name[0]}
+            {tutor.name?.[0] ?? "?"}
           </div>
         )}
 
@@ -81,14 +81,14 @@ export default function TutorDetailsCard({ tutor }: Props) {
         {/* Bio */}
         <div>
           <h3 className="font-semibold text-lg mb-1">Bio</h3>
-          <p className="text-sm text-muted-foreground">{profile.bio}</p>
+          <p className="text-sm text-muted-foreground">{profile?.bio}</p>
         </div>
 
         {/* Subjects */}
         <div>
           <h3 className="font-semibold text-lg mb-2">Subjects</h3>
           <div className="flex flex-wrap gap-2">
-            {profile.subject.map((sub, i) => (
+            {(profile?.subject ?? []).map((sub, i) => (
               <Badge key={i}>{sub}</Badge>
             ))}
           </div>
@@ -96,21 +96,21 @@ export default function TutorDetailsCard({ tutor }: Props) {
 
         {/* Price + Rating */}
         <div className="flex gap-6">
-          <p>💰 Hourly: ${profile.hourlyPrice}</p>
-          <p>⭐ Rating: {profile.rating}</p>
+          <p>💰 Hourly: ${profile?.hourlyPrice ?? "N/A"}</p>
+          <p>⭐ Rating: {profile?.rating ?? 0}</p>
         </div>
 
         {/* Availability */}
         <div>
           <h3 className="font-semibold text-lg mb-2">Availability</h3>
 
-          {profile.availability?.length === 0 ? (
+          {(profile?.availability?.length ?? 0) === 0 ? (
             <p className="text-sm text-muted-foreground">
               No availability set yet
             </p>
           ) : (
             <div className="space-y-3">
-              {profile.availability.map((slot) => (
+              {(profile?.availability ?? []).map((slot) => (
                 <Card key={slot.id} className="p-3 bg-muted">
                   <div className="flex justify-between items-center">
                     <div>
@@ -143,7 +143,7 @@ export default function TutorDetailsCard({ tutor }: Props) {
         <div>
           <h3 className="font-semibold text-lg mb-2">Categories</h3>
           <div className="space-y-3">
-            {profile.categories.map((cat) => (
+            {(profile?.categories ?? []).map((cat) => (
               <Card key={cat.id} className="p-3 bg-muted">
                 <p className="font-semibold">{cat.name}</p>
                 <p className="text-sm text-muted-foreground">

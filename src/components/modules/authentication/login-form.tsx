@@ -41,7 +41,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "https://skill-bridge-client-theta.vercel.app",
+        callbackURL: window.location.origin,
       });
     } catch (error) {
       toast.error("Google sign-in failed");

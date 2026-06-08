@@ -17,7 +17,7 @@ export const categoryService = {
 
 export const createCategory = async (payload: any) => {
   try {
-    const res = await fetch(`${API_URL}/category`, {
+    const res = await fetch(`${API_URL}/api/category`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

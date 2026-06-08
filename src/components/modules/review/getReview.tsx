@@ -10,9 +10,9 @@ type Review = {
   rating: number;
   comment: string;
   createdAt: string;
-  user: {
-    name: string;
-  };
+  user?: {
+    name?: string | null;
+  } | null;
 };
 
 export default function CategoryReviews() {
@@ -44,19 +44,19 @@ export default function CategoryReviews() {
           >
             {/* Avatar */}
             <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-              {r.user.name.charAt(0).toUpperCase()}
+              {(r.user?.name?.charAt(0) ?? "?").toUpperCase()}
             </div>
 
             {/* Content */}
             <div className="flex-1">
               <div className="bg-white p-3 rounded-xl shadow-sm">
                 <p className="font-semibold text-black text-sm">
-                  {r.user.name}
+                  {r.user?.name ?? "Anonymous"}
                 </p>
 
                 {/* ⭐ Rating */}
                 <p className="text-yellow-500 text-xs">
-                  {"⭐".repeat(r.rating)}
+                  {"⭐".repeat(Math.max(0, Math.round(r.rating || 0)))}
                 </p>
 
                 <p className="text-sm text-gray-700 mt-1">

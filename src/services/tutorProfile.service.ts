@@ -24,7 +24,7 @@ export const tutorProfileService = {
 
       config.next = { ...config.next, tags: ["tutorProfile"] };
 
-      const res = await fetch(`${API_URL}/tutor/profile`, config);
+      const res = await fetch(`${API_URL}/api/tutor/profile`, config);
 
       const data = await res.json();
 

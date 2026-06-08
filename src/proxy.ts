@@ -15,15 +15,21 @@ function redirectByRole(role: string, request: NextRequest) {
   return NextResponse.redirect(new URL("/dashboard", request.url));
 }
 
+function redirectToLogin(request: NextRequest) {
+  const loginUrl = new URL("/login", request.url);
+  loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+  return NextResponse.redirect(loginUrl);
+}
+
 export async function proxy(request: NextRequest) {
+  const pathName = request.nextUrl.pathname;
   try {
-    const pathName = request.nextUrl.pathname;
     const cookieHeader =
       request.headers.get("cookie") ?? request.cookies.toString();
     const role = await getRoleFromCookies(cookieHeader, AUTH_URL);
 
     if (!role) {
-      return NextResponse.next();
+      return redirectToLogin(request);
     }
 
     if (pathName === "/dashboard") {
@@ -42,19 +48,20 @@ export async function proxy(request: NextRequest) {
       return redirectByRole(role, request);
     }
 
-    if (role === Roles.student && pathName !== "/dashboard") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (pathName.startsWith("/dashboard") && role !== Roles.student) {
+      return redirectByRole(role, request);
     }
 
     return NextResponse.next();
   } catch {
-    return NextResponse.next();
+    return redirectToLogin(request);
   }
 }
 
 export const config = {
   matcher: [
     "/dashboard",
+    "/dashboard/:path*",
     "/admin",
     "/admin/:path*",
     "/tutor",

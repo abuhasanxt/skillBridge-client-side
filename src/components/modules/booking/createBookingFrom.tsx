@@ -207,14 +207,22 @@ export function CreateBookingForm() {
       </CardContent>
 
       <CardFooter>
-        <Button
-          form="create-booking-form"
-          type="submit"
-          className="w-full"
-          disabled={!tutorProfileId}
-        >
-          {tutorProfileId ? "Book Now" : "Loading Tutor Info..."}
-        </Button>
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
+            <Button
+              form="create-booking-form"
+              type="submit"
+              className="w-full"
+              disabled={!tutorProfileId || isSubmitting}
+            >
+              {isSubmitting
+                ? "Booking..."
+                : tutorProfileId
+                  ? "Book Now"
+                  : "Loading Tutor Info..."}
+            </Button>
+          )}
+        </form.Subscribe>
       </CardFooter>
     </Card>
   );
