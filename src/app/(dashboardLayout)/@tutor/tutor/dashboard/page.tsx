@@ -1,199 +1,215 @@
 "use client";
 
-import {
-  CalendarDays,
-  Clock,
-  DollarSign,
-  BookOpen,
-  CheckCircle,
-  UserCheck,
-} from "lucide-react";
+import Loading from "@/components/ui/loading";
+import { getBooking } from "@/services/booking.service";
+import { BookOpen, CheckCircle, UserCheck, XCircle, Check } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type Booking = {
+  id: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  notes: string;
+  student?: {
+    name: string;
+    email: string;
+  };
+  tutor?: {
+    subject: string[];
+  };
+};
 
 export default function TutorDashboard() {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      setLoading(true);
+
+      const { data, error } = await getBooking.tutor();
+
+      if (!error && data) {
+        setBookings(data);
+      }
+      setLoading(false);
+    };
+
+    fetchBookings();
+  }, []);
+  if (loading) {
+    return <Loading />;
+  }
+
+  const cancelBookings = bookings.filter(
+    (booking) => booking.status === "CANCELLED",
+  ).length;
+
+  const confirmBookings = bookings.filter(
+    (booking) => booking.status === "CONFIRMED",
+  ).length;
+
+  const completedBookings = bookings.filter(
+    (booking) => booking.status === "COMPLETED",
+  ).length;
+
+  const categories = [
+    ...new Set(bookings.flatMap((booking) => booking.tutor?.subject || [])),
+  ];
+
+  const stats = [
+    {
+      title: "Total Bookings",
+      value: bookings.length,
+      icon: BookOpen,
+      color: "text-blue-600",
+      bg: "bg-blue-100 dark:bg-blue-900/30",
+    },
+    {
+      title: "Confirmed",
+      value: confirmBookings,
+      icon: Check,
+      color: "text-green-600",
+      bg: "bg-green-100 dark:bg-green-900/30",
+    },
+    {
+      title: "Cancelled",
+      value: cancelBookings,
+      icon: XCircle,
+      color: "text-red-600",
+      bg: "bg-red-100 dark:bg-red-900/30",
+    },
+    {
+      title: "Completed",
+      value: completedBookings,
+      icon: CheckCircle,
+      color: "text-emerald-600",
+      bg: "bg-emerald-100 dark:bg-emerald-900/30",
+    },
+  ];
+
   return (
     <div className="space-y-6 p-6">
-      {/* Welcome Section */}
+      {/* Header */}
       <div className="rounded-2xl border bg-background p-6 shadow-sm">
-        <h1 className="text-3xl font-bold">
-          Tutor Dashboard 
-        </h1>
+        <h1 className="text-3xl font-bold">Tutor Dashboard</h1>
         <p className="mt-2 text-muted-foreground">
-          Manage your bookings, availability, categories, and tutoring sessions.
+          Manage your bookings, sessions and students.
         </p>
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-xl border bg-card p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">
-              Total Bookings
-            </span>
-            <BookOpen className="h-5 w-5" />
-          </div>
-          <h2 className="mt-3 text-3xl font-bold">48</h2>
-        </div>
+      {/* Stats */}
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {stats.map((item) => {
+          const Icon = item.icon;
 
-        <div className="rounded-xl border bg-card p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">
-              Pending Requests
-            </span>
-            <Clock className="h-5 w-5" />
-          </div>
-          <h2 className="mt-3 text-3xl font-bold">7</h2>
-        </div>
+          return (
+            <div
+              key={item.title}
+              className="rounded-2xl border bg-card p-5 shadow-sm transition-all hover:shadow-lg"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{item.title}</p>
 
-        <div className="rounded-xl border bg-card p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">
-              Completed Sessions
-            </span>
-            <CheckCircle className="h-5 w-5" />
-          </div>
-          <h2 className="mt-3 text-3xl font-bold">41</h2>
-        </div>
+                  <h2 className="mt-2 text-3xl font-bold">{item.value}</h2>
+                </div>
 
-        <div className="rounded-xl border bg-card p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">
-              Total Earnings
-            </span>
-            <DollarSign className="h-5 w-5" />
-          </div>
-          <h2 className="mt-3 text-3xl font-bold">$2,450</h2>
-        </div>
+                <div className={`rounded-full p-3 ${item.bg}`}>
+                  <Icon className={`h-6 w-6 ${item.color}`} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Main Section */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Availability */}
+      {/* Middle Section */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Categories */}
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">
-              Availability
-            </h2>
+          <h2 className="mb-4 text-xl font-semibold">Teaching Categories</h2>
 
-            <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
-              Available
-            </span>
-          </div>
-
-          <div className="mt-5 space-y-3">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Monday</span>
-              <span>6 PM - 10 PM</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Wednesday</span>
-              <span>7 PM - 9 PM</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Friday</span>
-              <span>5 PM - 11 PM</span>
-            </div>
+          <div className="flex flex-wrap gap-2">
+            {categories.length > 0 ? (
+              categories.map((category) => (
+                <span
+                  key={category}
+                  className="rounded-full border px-3 py-1 text-sm"
+                >
+                  {category}
+                </span>
+              ))
+            ) : (
+              <p className="text-muted-foreground">No categories found</p>
+            )}
           </div>
         </div>
 
-        {/* Categories */}
+        {/* Recent Students */}
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <h2 className="text-xl font-semibold mb-4">
-            Teaching Categories
-          </h2>
+          <h2 className="mb-4 text-xl font-semibold">Recent Students</h2>
 
-          <div className="flex flex-wrap gap-2">
-            {[
-              "React",
-              "Next.js",
-              "JavaScript",
-              "TypeScript",
-              "Node.js",
-            ].map((category) => (
-              <span
-                key={category}
-                className="rounded-full border px-3 py-1 text-sm"
-              >
-                {category}
-              </span>
+          <div className="space-y-3">
+            {bookings.slice(0, 5).map((booking) => (
+              <div key={booking.id} className="rounded-lg border p-3">
+                <p className="font-medium">{booking.student?.name}</p>
+
+                <p className="text-sm text-muted-foreground">
+                  {booking.student?.email}
+                </p>
+              </div>
             ))}
           </div>
         </div>
-
-        {/* Upcoming Sessions */}
-        <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">
-            Upcoming Sessions
-          </h2>
-
-          <div className="mt-4 space-y-4">
-            <div className="rounded-lg border p-3">
-              <p className="font-medium">
-                React Fundamentals
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Student: Hasan
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Today • 8:00 PM
-              </p>
-            </div>
-
-            <div className="rounded-lg border p-3">
-              <p className="font-medium">
-                Next.js Deep Dive
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Student: Fahim
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Tomorrow • 7:00 PM
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* Recent Booking Requests */}
+      {/* Recent Bookings */}
       <div className="rounded-2xl border bg-card p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="mb-4 flex items-center gap-2">
           <UserCheck className="h-5 w-5" />
-          <h2 className="text-xl font-semibold">
-            Recent Booking Requests
-          </h2>
+
+          <h2 className="text-xl font-semibold">Recent Booking Requests</h2>
         </div>
 
         <div className="space-y-3">
-          <div className="flex items-center justify-between rounded-lg border p-4">
-            <div>
-              <p className="font-medium">
-                JavaScript Advanced
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Requested by Ahmed
-              </p>
-            </div>
+          {bookings.length > 0 ? (
+            bookings.slice(0, 5).map((booking) => (
+              <div
+                key={booking.id}
+                className="flex items-center justify-between rounded-lg border p-4"
+              >
+                <div>
+                  <p className="font-medium">{booking.notes}</p>
 
-            <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
-              Pending
-            </span>
-          </div>
+                  <p className="text-sm text-muted-foreground">
+                    Requested by {booking.student?.name}
+                  </p>
 
-          <div className="flex items-center justify-between rounded-lg border p-4">
-            <div>
-              <p className="font-medium">
-                React Project Review
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Requested by Rahim
-              </p>
-            </div>
+                  <p className="text-xs text-muted-foreground">
+                    {new Date(booking.startDate).toLocaleString()}
+                  </p>
+                </div>
 
-            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
-              Confirmed
-            </span>
-          </div>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${
+                    booking.status === "CONFIRMED"
+                      ? "bg-green-100 text-green-700"
+                      : booking.status === "CANCELLED"
+                        ? "bg-red-100 text-red-700"
+                        : booking.status === "COMPLETED"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+                  {booking.status}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p className="text-muted-foreground">No bookings found</p>
+          )}
         </div>
       </div>
     </div>

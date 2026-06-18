@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/ui/loading";
 import { booking, getBooking } from "@/services/booking.service";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -65,9 +66,7 @@ export default function GetTutorBookings() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-500">
-        Loading...
-      </div>
+      <Loading/>
     );
   }
 
