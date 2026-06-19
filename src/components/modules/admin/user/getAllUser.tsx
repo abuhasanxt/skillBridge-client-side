@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { user } from "@/services/getAllUser.service";
 import { toast } from "sonner";
+import Loading from "@/components/ui/loading";
 
 type User = {
   id: string;
@@ -16,21 +17,32 @@ type User = {
 
 export default function GetAllUser() {
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
+       setLoading(true);
+
       const res = await user.getAllUser();
+
       if (res?.error || !res?.data?.data) {
         toast.error("Failed to load users");
         setUsers([]);
+        setLoading(false);
         return;
       }
       setUsers(res.data.data);
+       setLoading(false);
     };
 
     fetchUsers();
   }, []);
 
+  if (loading) {
+  return (
+   <Loading/>
+  );
+}
   const handleRoleChange = async (id: string, role: string) => {
     const previous = users.find((u) => u.id === id)?.role;
     setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role } : u)));
@@ -66,7 +78,7 @@ export default function GetAllUser() {
       <h1 className="text-2xl font-bold mb-6 text-center">All Users</h1>
 
       {/*  Desktop Table */}
-      <div className="hidden md:block overflow-x-auto border rounded-lg  ">
+      <div className="hidden lg:block overflow-x-auto border rounded-lg  ">
         <table className="w-full text-sm text-left">
           <thead className="">
             <tr>
@@ -126,7 +138,7 @@ export default function GetAllUser() {
       </div>
 
       {/*  Mobile Card View */}
-      <div className=" grid grid-cols-1 gap-4 md:hidden ">
+      <div className=" grid grid-cols-1 md:grid-cols-2 gap-4 lg:hidden">
         {users.map((user) => (
           <div key={user.id} className="border rounded-lg p-4 shadow-sm ">
             <div className="flex items-center gap-3">

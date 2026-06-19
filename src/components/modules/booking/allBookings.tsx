@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/ui/loading";
 import { allBooking,  getAllBooking,  } from "@/services/booking.service";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -65,9 +66,7 @@ export default function GetAllBookings() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
+     <Loading/>
     );
   }
 
@@ -128,19 +127,19 @@ export default function GetAllBookings() {
       {/*  MOBILE CARD */}
       <div className="lg:hidden md:block space-y-4">
         {bookings.map((b) => (
-          <div key={b.id} className=" shadow-md bg-white rounded-xl p-4 border">
+          <div key={b.id} className=" shadow-md  rounded-xl p-4 border">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
                 {(b.student?.name?.charAt(0) ?? "?").toUpperCase()}
               </div>
 
               <div>
-                <h3 className="font-semibold text-black">{b.student?.name ?? "Unknown"}</h3>
-                <p className="text-xs text-gray-500">{b.student?.email ?? ""}</p>
+                <h3 className="font-semibold text-white">{b.student?.name ?? "Unknown"}</h3>
+                <p className="text-xs text-white">{b.student?.email ?? ""}</p>
               </div>
             </div>
 
-            <div className="text-sm text-gray-600 space-y-1">
+            <div className="text-sm text-white space-y-1">
               <p>
                 <b>Phone:</b> {b.student?.phone ?? ""}
               </p>
