@@ -43,25 +43,35 @@ export interface ProfileData{
 }
 
 export const tutorProfileCreateService = {
-  createTutorProfile: async function (profileData: ProfileData, token?: string) {
+  createTutorProfile: async function (
+    profileData: ProfileData,
+    cookieString: string
+  ) {
     try {
-
       const res = await fetch(`${API_URL}/api/tutor/profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          cookie: `better-auth.session_token=${token}`,
+          Cookie: cookieString,
         },
         body: JSON.stringify(profileData),
       });
 
       const data = await res.json();
 
-      return { data, error: null };
-
+      return {
+        data,
+        error: null,
+      };
     } catch (error) {
       console.log(error);
-      return { data: null, error: { message: "Something Went Wrong" } };
+
+      return {
+        data: null,
+        error: {
+          message: "Something Went Wrong",
+        },
+      };
     }
   },
 };
